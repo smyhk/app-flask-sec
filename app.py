@@ -20,13 +20,14 @@ class User(db.Model):
         self.email = email
 
     def __repr__(self):
-        return '<User %r' % self.username
+        return '<User %r>' % self.username
 
 
 @app.route("/")
 def index():
-    myUser = User.query.all()
-    return render_template('add_user.html', myUser=myUser)
+    myUsers = User.query.all()
+    oneItem = User.query.filter_by(username="smyhk").one()
+    return render_template('add_user.html', myUsers=myUsers, oneItem=oneItem)
 
 
 @app.route("/post_user", methods=['POST'])

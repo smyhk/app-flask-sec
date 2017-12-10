@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Add User</title>
+        </head>
+        <body>
+            <form method="post" action="post_user">
+                <label>Username:</label>
+                <input type="text" id="username" name="username">
+
+                <label>Email:</label>
+                <input type="email" id="email" name="email">
+
+                <input type="submit" />
+            </form>
+
+        {% for user in myUser %}
+            <ul>
+                <li>{{ user.username }} - {{ user.email }}</li>
+            </ul>
+        {% endfor %}
+        </body>
+</html>

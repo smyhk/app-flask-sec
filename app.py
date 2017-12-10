@@ -1,10 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
 # docker run -p 5432:5432 --name flask-postgres -e POSTGRES_PASSWORD=secretpassword -d postgres
 # this will be loaded from a config file or env for production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:secretpassword@localhost:5432/appflasksec'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # surpress deprecation warning
 db = SQLAlchemy(app)
 
 
@@ -23,7 +25,17 @@ class User(db.Model):
 
 @app.route("/")
 def index():
-    return "<h1>Hello Flask!</h>"
+    myUser = User.query.all()
+    return render_template('add_user.html', myUser=myUser)
+
+
+@app.route("/post_user", methods=['POST'])
+def post_user():
+    user = User(request.form['username'], request.form['email'])
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
